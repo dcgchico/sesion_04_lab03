@@ -1,0 +1,13 @@
+---
+- name: "Laboratorio de Facts"
+  hosts: 
+    172.17.149.120
+  
+  tasks:
+    - name: "Listar los facts"
+      debug:
+        var: ansible_facts
+
+
+
+...
