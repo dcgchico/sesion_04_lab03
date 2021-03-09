@@ -8,6 +8,32 @@
       debug:
         var: ansible_facts
 
-
+    - name: "Crear archivo datos_{{ ansible_facts['hostname'] }}"
+      file:
+        path: "/tmp/datos_{{ ansible_facts['hostname'] }}"
+        state: touch
+        
+    - name: "Insertar datos de red"
+      lineinfile:
+        path: "/tmp/datos_{{ ansible_facts['hostname'] }}"
+        line: |
+          IP:  {{ ansible_facts["default_ipv4"]["address"] }}
+          MAC: {{ ansible_facts["default_ipv4"]["macaddress"] }}
+          GATEWAY: {{ ansible_facts["default_ipv4"]["gateway"] }}
+          NETMASK: {{ ansible_facts["default_ipv4"]["netmask"] }}
+    
+    - name: "Insertar datos de almacenamiento"
+      lineinfile:
+        path: "/tmp/datos_{{ ansible_facts['hostname'] }}"
+        line: |
+          Dispositivo: {{ item.key }}
+          Capacidad: {{ item.value.size }}
+      loop: "{{ ansible_facts['devices']|dict2items }}"
+    
+    -name: "Crear disco"
+      parted:
+        device: /dev/sdb
+        number: 1
+        state: present
 
 ...
