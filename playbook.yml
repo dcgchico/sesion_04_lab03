@@ -30,7 +30,7 @@
           Capacidad: {{ item.value.size }}
       loop: "{{ ansible_facts['devices']|dict2items }}"
     
-    -name: "Crear disco"
+    - name: "Crear disco"
       parted:
         device: /dev/sdb
         number: 1
